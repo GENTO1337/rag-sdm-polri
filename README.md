@@ -10,7 +10,8 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white)](https://docker.com)
-[![OpenAI](https://img.shields.io/badge/LLM-OpenAI_API-412991?style=flat-square&logo=openai&logoColor=white)](https://platform.openai.com)
+[![LLM](https://img.shields.io/badge/LLM-6_Provider-412991?style=flat-square)](#-teknologi-yang-digunakan)
+[![Qdrant](https://img.shields.io/badge/Vector_DB-Qdrant-DC244C?style=flat-square)](https://qdrant.tech)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
 </div>
@@ -23,8 +24,8 @@ Prototype aplikasi **Question & Answer** yang memungkinkan personel Polri mendap
 
 Sistem ini mengimplementasikan pipeline **RAG (Retrieval-Augmented Generation)** yang:
 1. **Memproses** dokumen PDF menjadi potongan (*chunks*) terindeks
-2. **Menemukan** bagian dokumen yang paling relevan dengan pertanyaan pengguna menggunakan BM25 + Hybrid Retrieval
-3. **Menghasilkan** jawaban akurat berbahasa Indonesia menggunakan LLM (OpenAI), lengkap dengan referensi halaman sumber
+2. **Menemukan** bagian dokumen yang paling relevan dengan pertanyaan pengguna menggunakan Hybrid Retrieval (BM25 + embedding multibahasa + Reciprocal Rank Fusion)
+3. **Menghasilkan** jawaban akurat berbahasa Indonesia menggunakan LLM pilihan Anda (Gemini, OpenAI, Groq, OpenRouter, Anthropic, atau Mistral), lengkap dengan referensi halaman sumber
 
 > Sistem juga dapat menjawab pertanyaan umum di luar knowledge base sebagai asisten AI ramah.
 
@@ -34,7 +35,7 @@ Sistem ini mengimplementasikan pipeline **RAG (Retrieval-Augmented Generation)**
 
 | Fitur | Keterangan |
 |---|---|
-| 🔍 **Smart Retrieval** | BM25 lexical search + Hybrid Reranking ala RAGFlow |
+| 🔍 **Smart Retrieval** | BM25 + embedding multibahasa (fastembed) + RRF + re-ranking, vektor di Qdrant |
 | 🤖 **Dual Mode** | Mode RAG (dokumen) + Mode General (chat bebas) |
 | 📄 **Multi-dokumen** | Upload PDF/TXT tak terbatas, dipilih otomatis sesuai pertanyaan |
 | 📑 **Sitasi Halaman** | Setiap jawaban dilengkapi referensi `[1][2]` + nomor halaman |
@@ -42,7 +43,9 @@ Sistem ini mengimplementasikan pipeline **RAG (Retrieval-Augmented Generation)**
 | 📊 **Score Bars** | Visualisasi skor KEYWORD · VECTOR · RERANK per sumber |
 | 🌐 **Cyber UI** | Tampilan terminal siber bertema SDM Polri (emas/merah/hitam) |
 | 🐳 **Docker Ready** | Satu perintah `docker compose up` langsung jalan |
-| 🔄 **LLM Fallback** | Rantai fallback otomatis jika model utama overloaded |
+| 🔑 **Multi-Provider AI** | Tempel API key di UI, jenis penyedia dikenali otomatis (Gemini, OpenAI, Groq, OpenRouter, Anthropic, Mistral) |
+| ⚡ **Cepat & Tahan Gagal** | Model Gemini ditemukan otomatis, balapan model paralel (hedged request), circuit breaker 30 dtk |
+| 📴 **Mode Offline** | Tanpa API key / AI down, pencarian dokumen tetap jalan (mode ekstraktif) |
 | 📱 **Responsive** | Tampilan desktop & mobile |
 
 ---
@@ -63,11 +66,11 @@ Sistem ini mengimplementasikan pipeline **RAG (Retrieval-Augmented Generation)**
 └──────┬──────────────────────────────────────────┬────────────┘
        │                                          │
 ┌──────▼──────────────┐              ┌────────────▼────────────┐
-│   RAG Engine        │              │   LLM (OpenAI API)       │
+│   RAG Engine        │              │   LLM Router (6 provider)│
 │                     │              │                          │
-│  ┌───────────────┐  │              │  gpt-4o-mini            │
-│  │  Ingest       │  │              │  ↓ fallback chain        │
-│  │  PDF → Chunks │  │              │  (model lain via .env) │
+│  ┌───────────────┐  │              │  Gemini/OpenAI/Groq/... │
+│  │  Ingest       │  │              │  ↓ hedged race + breaker │
+│  │  PDF → Chunks │  │              │  ↓ mode ekstraktif      │
 │  │  Laws/General │  │              │                         │
 │  └───────┬───────┘  │              │                         │
 │          │          │              └──────────────────────────┘
@@ -93,12 +96,12 @@ Sistem ini mengimplementasikan pipeline **RAG (Retrieval-Augmented Generation)**
 ### Prasyarat
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows/Mac/Linux)
-- API key LLM milik Anda sendiri — [OpenRouter](https://openrouter.ai/settings/keys) (disarankan), [OpenAI](https://platform.openai.com/api-keys), atau [Groq](https://console.groq.com/keys) (gratis). Lihat catatan di bawah
+- API key LLM milik Anda sendiri — [Gemini](https://aistudio.google.com/apikey), [OpenRouter](https://openrouter.ai/settings/keys), [OpenAI](https://platform.openai.com/api-keys), [Groq](https://console.groq.com/keys) (gratis), Anthropic, atau Mistral. Lihat catatan di bawah
 
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/Fahmigans1337/rag-sdm-polri.git
+git clone https://github.com/GENTO1337/rag-sdm-polri.git
 cd rag-sdm-polri
 ```
 
@@ -115,7 +118,7 @@ Tunggu sekitar satu menit, lalu buka **http://localhost:8080**.
 
 Saat pertama dibuka, muncul jendela **"Aktifkan AI dengan API key Anda"** (atau klik tombol **🔑 API KEY**
 di pojok kanan atas). Tempel key Anda, lalu klik **Aktifkan**. Key divalidasi ke penyedia, jenis penyedia
-dikenali otomatis (OpenRouter `sk-or-v1-...`, OpenAI `sk-...`, Groq `gsk_...`), dan tersimpan di volume Docker
+dikenali otomatis (OpenRouter `sk-or-v1-...`, OpenAI `sk-...`, Groq `gsk_...`, Anthropic `sk-ant-...`, Gemini `AIza...`/`AQ....`, Mistral 32 karakter), dan tersimpan di volume Docker
 lokal sehingga tetap aktif setelah container di-restart. Tidak perlu terminal maupun file `.env`.
 
 Alternatif lewat terminal (opsional):
@@ -209,11 +212,11 @@ docker compose down -v
 | Variabel | Default | Keterangan |
 |---|---|---|
 | `OPENAI_API_KEY` | *(wajib)* | API Key dari platform.openai.com |
-| `OPENAI_MODEL` | `gpt-4o-mini` | Model OpenAI yang dipakai |
+| `OPENAI_MODEL` | *(otomatis)* | Model yang dipakai; kosong = dipilih otomatis sesuai penyedia |
 | `LLM_PROVIDER` | `openai` | Penyedia LLM (`openai` / `none` untuk mode ekstraktif) |
 | `MIN_COVERAGE` | `0.42` | Ambang relevansi BM25 (0.0–1.0) |
 | `TOP_K` | `6` | Jumlah chunk terambil per query |
-| `LLM_TIMEOUT` | `25` | Timeout request ke LLM (detik) |
+| `LLM_TIMEOUT` | `25` | Timeout request ke LLM (detik, efektif maks 20) |
 | `CHUNK_SIZE` | `1100` | Ukuran chunk teks (karakter) |
 
 ---
@@ -244,7 +247,7 @@ rag-sdm-polri/
 │   ├── rag.py           # RAG pipeline utama (ingest→retrieve→generate)
 │   ├── retrieval.py     # BM25 + Hybrid Index + Re-ranking
 │   ├── ingest.py        # PDF parser + chunking (Laws/General template)
-│   ├── llm.py           # OpenAI client (+ fallback ekstraktif tanpa LLM)
+│   ├── llm.py           # LLM router 6 provider (auto-detect, hedged race, circuit breaker)
 │   ├── config.py        # Settings dari environment variable
 │   └── static/
 │       ├── index.html   # Single-page Cyber UI
@@ -273,6 +276,20 @@ rag-sdm-polri/
 
 | Komponen | Teknologi |
 |---|---|
+| **Bahasa & Runtime** | Python 3.11 |
+| **Backend** | FastAPI, Uvicorn, Pydantic |
+| **PDF Parsing** | PyMuPDF (fitz); OCR opsional RapidOCR (ONNX) untuk PDF scan |
+| **Retrieval leksikal** | BM25 (implementasi sendiri) |
+| **Retrieval semantik** | fastembed (ONNX, CPU) — `paraphrase-multilingual-MiniLM-L12-v2` |
+| **Vector store** | Qdrant (mode lokal persisten), cadangan NumPy |
+| **Fusi & Re-ranking** | Reciprocal Rank Fusion + skor coverage istilah |
+| **LLM (6 provider)** | Google Gemini, OpenAI, Groq, OpenRouter, Anthropic, Mistral |
+| **Optimasi LLM** | Auto-detect provider dari key, model discovery Gemini, hedged parallel request, circuit breaker |
+| **HTTP Client** | HTTPX |
+| **Frontend** | HTML5, CSS3, Vanilla JavaScript (tanpa build step) |
+| **Containerisasi** | Docker, Docker Compose (named volume, non-root user, healthcheck) |
+
+---|---|
 | **Backend** | Python 3.11, FastAPI, Uvicorn |
 | **PDF Parsing** | PyMuPDF (fitz) + OCR sidecar |
 | **Retrieval** | BM25 (custom), Numpy, Reciprocal Rank Fusion |
@@ -338,9 +355,10 @@ python scripts/debug_retrieval.py
 
 ## 📝 Catatan
 
-- Sistem menggunakan **BM25-only** (leksikal) karena koneksi ke model embedding eksternal mungkin timeout tergantung jaringan. Untuk mengaktifkan hybrid embedding, pastikan koneksi ke HuggingFace tersedia.
+- Retrieval bersifat **hibrida** (BM25 + embedding). Model embedding diunduh sekali dari HuggingFace di latar belakang; selama belum siap, sistem memakai BM25 saja sehingga startup tidak menunggu.
 - Jawaban hanya berdasarkan dokumen di knowledge base. Jika informasi tidak tersedia, sistem akan menyampaikan bahwa data tidak ditemukan.
-- API Key OpenAI dibuat di [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+- API key dibuat di dashboard penyedia pilihan Anda (mis. [Google AI Studio](https://aistudio.google.com/apikey)). Key disimpan lokal di volume Docker dan tidak pernah ditampilkan kembali.
+- Di WSL, Docker daemon perlu dinyalakan setelah restart: `sudo service docker start`.
 
 ---
 
@@ -355,6 +373,6 @@ by : Bripda Zul Fahmi Rizki
 
 **RAG SDM POLRI** — *Secure Knowledge Terminal*
 
-Built with ❤️ using FastAPI + OpenAI API
+Built with ❤️ using FastAPI + Qdrant + Multi-Provider LLM
 
 </div>
