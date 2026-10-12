@@ -105,6 +105,7 @@ cd rag-sdm-polri
 ### 2. Jalankan dengan Docker
 
 ```bash
+sudo service docker start
 docker compose up -d --build
 ```
 
