@@ -36,3 +36,13 @@ Thumbs.db
 
 # Docker
 *.env.local
+
+# skrip dev lokal
+/bench.py
+/chk.sh
+/diag.sh
+/fix_enc.py
+/patch_llm.py
+/simtest.py
+/status.sh
+/setup_docker.sh
