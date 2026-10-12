@@ -18,7 +18,7 @@
 
 ---
 
-## 📋 Deskripsi
+## Deskripsi
 
 Prototype aplikasi **Question & Answer** yang memungkinkan personel Polri mendapatkan informasi dari dokumen SDM secara cepat dan akurat menggunakan bahasa sehari-hari — tanpa perlu membuka dokumen dan mencari halaman per halaman secara manual.
 
@@ -31,26 +31,26 @@ Sistem ini mengimplementasikan pipeline **RAG (Retrieval-Augmented Generation)**
 
 ---
 
-## 🎯 Fitur Utama
+## Fitur Utama
 
 | Fitur | Keterangan |
 |---|---|
-| 🔍 **Smart Retrieval** | BM25 + embedding multibahasa (fastembed) + RRF + re-ranking, vektor di Qdrant |
-| 🤖 **Dual Mode** | Mode RAG (dokumen) + Mode General (chat bebas) |
-| 📄 **Multi-dokumen** | Upload PDF/TXT tak terbatas, dipilih otomatis sesuai pertanyaan |
-| 📑 **Sitasi Halaman** | Setiap jawaban dilengkapi referensi `[1][2]` + nomor halaman |
-| 🔎 **Chunk Explorer** | Inspect semua potongan dokumen yang terindeks |
-| 📊 **Score Bars** | Visualisasi skor KEYWORD · VECTOR · RERANK per sumber |
-| 🌐 **Cyber UI** | Tampilan terminal siber bertema SDM Polri (emas/merah/hitam) |
-| 🐳 **Docker Ready** | Satu perintah `docker compose up` langsung jalan |
-| 🔑 **Multi-Provider AI** | Tempel API key di UI, jenis penyedia dikenali otomatis (Gemini, OpenAI, Groq, OpenRouter, Anthropic, Mistral) |
-| ⚡ **Cepat & Tahan Gagal** | Model Gemini ditemukan otomatis, balapan model paralel (hedged request), circuit breaker 30 dtk |
-| 📴 **Mode Offline** | Tanpa API key / AI down, pencarian dokumen tetap jalan (mode ekstraktif) |
-| 📱 **Responsive** | Tampilan desktop & mobile |
+| **Smart Retrieval** | BM25 + embedding multibahasa (fastembed) + RRF + re-ranking, vektor di Qdrant |
+| **Dual Mode** | Mode RAG (dokumen) + Mode General (chat bebas) |
+| **Multi-dokumen** | Upload PDF/TXT tak terbatas, dipilih otomatis sesuai pertanyaan |
+| **Sitasi Halaman** | Setiap jawaban dilengkapi referensi `[1][2]` + nomor halaman |
+| **Chunk Explorer** | Inspect semua potongan dokumen yang terindeks |
+| **Score Bars** | Visualisasi skor KEYWORD · VECTOR · RERANK per sumber |
+| **Cyber UI** | Tampilan terminal siber bertema SDM Polri (emas/merah/hitam) |
+| **Docker Ready** | Satu perintah `docker compose up` langsung jalan |
+| **Multi-Provider AI** | Tempel API key di UI, jenis penyedia dikenali otomatis (Gemini, OpenAI, Groq, OpenRouter, Anthropic, Mistral) |
+| **Cepat & Tahan Gagal** | Model Gemini ditemukan otomatis, balapan model paralel (hedged request), circuit breaker 30 dtk |
+| **Mode Offline** | Tanpa API key / AI down, pencarian dokumen tetap jalan (mode ekstraktif) |
+| **Responsive** | Tampilan desktop & mobile |
 
 ---
 
-## 🏗️ Arsitektur Sistem
+## Arsitektur Sistem
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -91,7 +91,7 @@ Sistem ini mengimplementasikan pipeline **RAG (Retrieval-Augmented Generation)**
 
 ---
 
-## 🚀 Cara Menjalankan
+## Cara Menjalankan
 
 ### Prasyarat
 
@@ -177,7 +177,7 @@ http://localhost:8080
 
 ---
 
-## 🐳 Docker — Detail
+##  Docker — Detail
 
 ### Struktur Container
 
@@ -221,7 +221,7 @@ docker compose down -v
 
 ---
 
-## ⚙️ Menjalankan Tanpa Docker (Development)
+## Menjalankan Tanpa Docker (Development)
 
 ```bash
 # Buat virtual environment
@@ -238,7 +238,7 @@ python -m uvicorn app.main:app --host 127.0.0.1 --port 8080 --reload
 
 ---
 
-## 📁 Struktur Proyek
+## Struktur Proyek
 
 ```
 rag-sdm-polri/
@@ -301,7 +301,7 @@ rag-sdm-polri/
 
 ---
 
-## 💬 Cara Penggunaan
+##  Cara Penggunaan
 
 ### Bertanya dari Knowledge Base
 
@@ -338,7 +338,7 @@ Klik tombol **"Chunks"** pada dokumen di sidebar untuk melihat semua potongan te
 
 ---
 
-## 🧪 Testing
+##  Testing
 
 ```bash
 # Test retrieval (7 query — harus semua PASS)
@@ -353,7 +353,7 @@ python scripts/debug_retrieval.py
 
 ---
 
-## 📝 Catatan
+##  Catatan
 
 - Retrieval bersifat **hibrida** (BM25 + embedding). Model embedding diunduh sekali dari HuggingFace di latar belakang; selama belum siap, sistem memakai BM25 saja sehingga startup tidak menunggu.
 - Jawaban hanya berdasarkan dokumen di knowledge base. Jika informasi tidak tersedia, sistem akan menyampaikan bahwa data tidak ditemukan.
@@ -362,7 +362,7 @@ python scripts/debug_retrieval.py
 
 ---
 
-## 👨‍💻 Dibuat untuk
+##  Dibuat untuk
 
 **Seleksi Kemampuan Pemrograman — Tahap 2**
 Topik: *Retrieval-Augmented Generation (RAG)*
