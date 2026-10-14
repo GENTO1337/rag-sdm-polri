@@ -750,10 +750,232 @@ body{
   .welcome h2{font-size:22px}
   .msgs,.composer-wrap,.topbar{padding-left:14px;padding-right:14px}
 }
+/* ══════════════════════════════════════════
+   LOGIN GATE (cyber)
+══════════════════════════════════════════ */
+body.locked .app{visibility:hidden}
+.lg{
+  position:fixed;inset:0;z-index:300;
+  display:flex;padding:24px;overflow:auto;
+  background:radial-gradient(ellipse at 30% 45%,rgba(10,20,44,.80),rgba(2,4,9,.95) 72%);
+  transition:opacity .6s ease,visibility .6s ease;
+}
+.lg[hidden]{display:none}
+.lg-split{
+  position:relative;z-index:1;margin:auto;width:min(1120px,100%);
+  display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:64px;align-items:center;
+}
+.lg-brand{animation:fadeUp .7s ease both}
+.lg-brand-logo{
+  display:block;width:100%;max-width:600px;height:auto;
+  filter:drop-shadow(0 0 30px rgba(245,193,7,.25));
+  animation:lgFloat 9s ease-in-out infinite;
+}
+@keyframes lgFloat{50%{transform:translateY(-8px)}}
+.lg-brand-line{
+  width:140px;height:2px;margin:24px 0 18px;
+  background:linear-gradient(90deg,#f5c107,#e11d2e,transparent);
+  box-shadow:0 0 14px rgba(245,193,7,.5);
+}
+.lg-brand-kicker{font-family:Consolas,monospace;font-size:11px;letter-spacing:.24em;color:#f5c107;margin-bottom:8px}
+.lg-brand h2{font-size:30px;font-weight:800;line-height:1.2;letter-spacing:.02em;color:#dde4ef;margin-bottom:12px}
+.lg-brand h2 span{color:#f5c107;text-shadow:0 0 22px rgba(245,193,7,.45)}
+.lg-brand p{font-size:15.5px;color:rgba(180,195,220,.7);max-width:520px;margin-bottom:18px}
+.lg-feats{list-style:none;display:flex;flex-direction:column;gap:9px}
+.lg-feats li{position:relative;padding-left:22px;font-size:14px;color:rgba(200,214,236,.82)}
+.lg-feats li::before{
+  content:"◆";position:absolute;left:0;top:0;line-height:1.9;font-size:11px;
+  color:#f5c107;text-shadow:0 0 8px rgba(245,193,7,.6);
+}
+@media(max-width:1000px){
+  .lg-split{grid-template-columns:1fr;width:min(460px,100%);gap:18px;justify-items:center}
+  .lg-brand{text-align:center;width:100%}
+  .lg-brand-logo{max-width:340px;margin:0 auto}
+  .lg-brand-line,.lg-brand-kicker,.lg-brand h2,.lg-brand p,.lg-feats{display:none}
+}
+.lg.out{opacity:0;visibility:hidden;pointer-events:none}
+.lg-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(245,193,7,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(245,193,7,.05) 1px,transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 25%,transparent 72%);
+          mask-image:radial-gradient(ellipse at center,#000 25%,transparent 72%);
+  animation:lgGrid 24s linear infinite;
+}
+@keyframes lgGrid{to{background-position:0 46px,46px 0}}
+.lg-glow{
+  position:absolute;top:calc(50% - 260px);left:calc(32% - 260px);width:520px;height:520px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(245,193,7,.13),transparent 65%);
+  filter:blur(30px);animation:lgBreath 6s ease-in-out infinite;
+}
+@keyframes lgBreath{50%{transform:scale(1.15);opacity:.65}}
+
+.lg-wrap{
+  position:relative;z-index:1;width:min(440px,100%);
+  filter:drop-shadow(0 0 26px rgba(245,193,7,.16)) drop-shadow(0 26px 50px rgba(0,0,0,.65));
+  animation:fadeUp .7s ease both;
+}
+.lg-card{
+  position:relative;overflow:hidden;padding:30px 30px 20px;
+  background:linear-gradient(160deg,rgba(9,17,38,.96),rgba(3,6,15,.98));
+  border:1px solid rgba(245,193,7,.38);
+  clip-path:polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,24px 100%,0 calc(100% - 24px));
+}
+.lg-card::before{ /* garis neon atas */
+  content:"";position:absolute;left:0;top:0;width:100%;height:2px;
+  background:linear-gradient(90deg,transparent,#f5c107 25%,#e11d2e 60%,transparent);
+  box-shadow:0 0 16px rgba(245,193,7,.6);
+}
+.lg-card::after{ /* garis pindai */
+  content:"";position:absolute;left:0;right:0;height:90px;top:-90px;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(245,193,7,.07),transparent);
+  animation:lgScan 5.5s linear infinite;
+}
+@keyframes lgScan{to{transform:translateY(560px)}}
+.lg-bracket{position:absolute;width:16px;height:16px;border:2px solid #f5c107;opacity:.8;pointer-events:none}
+.lg-bracket.tl{top:8px;left:8px;border-right:0;border-bottom:0}
+.lg-bracket.br{bottom:8px;right:8px;border-left:0;border-top:0}
+
+.lg-head{text-align:center;margin-bottom:6px}
+.lg-hero{width:96px;height:110px;margin:6px auto 12px}
+.lg-hero .hero-logo{width:70px}
+.lg-title{
+  font-size:26px;font-weight:800;letter-spacing:.16em;color:#dde4ef;line-height:1.1;
+}
+.lg-title span{color:#f5c107;text-shadow:0 0 22px rgba(245,193,7,.55)}
+.lg-sub{
+  font-family:Consolas,monospace;font-size:10.5px;letter-spacing:.26em;
+  color:rgba(245,193,7,.55);margin-top:6px;
+}
+.lg-boot{
+  min-height:58px;margin:14px 0 4px;padding:9px 12px;
+  font-family:Consolas,monospace;font-size:11px;line-height:1.65;
+  color:#10b981;text-shadow:0 0 10px rgba(16,185,129,.45);
+  background:rgba(16,185,129,.045);border-left:3px solid rgba(16,185,129,.55);
+  white-space:pre;overflow:hidden;
+}
+.lg-boot .cur{display:inline-block;width:7px;height:12px;background:#10b981;vertical-align:-1px;animation:blinkCaret 1s steps(2) infinite}
+
+.lg-form{display:flex;flex-direction:column;gap:14px;margin-top:12px}
+.lg-field label{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:Consolas,monospace;font-size:10.5px;letter-spacing:.2em;font-weight:700;
+  color:rgba(245,193,7,.75);margin-bottom:6px;
+}
+.lg-field label em{font-style:normal;font-weight:400;letter-spacing:.06em;color:rgba(140,160,195,.55)}
+.lg-input{
+  display:flex;align-items:center;gap:10px;padding:0 12px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(245,193,7,.26);
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+  transition:border-color .2s,background .2s,box-shadow .2s;
+}
+.lg-input:focus-within{
+  border-color:#f5c107;background:rgba(245,193,7,.06);
+  box-shadow:0 0 0 1px rgba(245,193,7,.22),inset 0 0 18px rgba(245,193,7,.07);
+}
+.lg-input .ic{font-family:Consolas,monospace;color:#f5c107;font-weight:700;font-size:15px;flex:none;text-shadow:0 0 10px rgba(245,193,7,.6)}
+.lg-input input{
+  flex:1;min-width:0;padding:13px 0;background:transparent;border:0;outline:0;
+  font-family:Consolas,monospace;font-size:15px;letter-spacing:.04em;color:#e8eefc;
+}
+.lg-input input::placeholder{color:rgba(120,140,175,.45);letter-spacing:.02em}
+.lg-input input:-webkit-autofill{-webkit-text-fill-color:#e8eefc;-webkit-box-shadow:0 0 0 60px #0a1426 inset}
+.lg-eye{
+  flex:none;background:none;border:0;cursor:pointer;padding:4px 0 4px 6px;
+  font-family:Consolas,monospace;font-size:10px;letter-spacing:.14em;font-weight:700;
+  color:rgba(34,211,238,.75);transition:color .15s;
+}
+.lg-eye:hover{color:#22d3ee}
+.lg-caps{
+  display:none;margin-top:6px;font-family:Consolas,monospace;font-size:10.5px;
+  letter-spacing:.06em;color:#fb923c;
+}
+.lg-caps.on{display:block}
+
+.lg-btn{
+  position:relative;overflow:hidden;margin-top:4px;padding:14px 18px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(135deg,#f5c107,#d4a00a);border:0;color:#0a0600;
+  font-size:13px;letter-spacing:.2em;font-weight:800;cursor:pointer;
+  clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
+  transition:filter .18s,transform .18s,box-shadow .18s;
+}
+.lg-btn:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 8px 28px rgba(245,193,7,.4)}
+.lg-btn:disabled{cursor:not-allowed;filter:saturate(.45) brightness(.8)}
+.lg-btn .bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:#0a0600;opacity:.55}
+.lg-btn.busy .bar{animation:lgBar 1.1s ease forwards}
+@keyframes lgBar{to{width:100%}}
+
+.lg-msg{
+  min-height:20px;font-family:Consolas,monospace;font-size:12px;line-height:1.45;
+  letter-spacing:.03em;color:rgba(200,214,236,.7);
+}
+.lg-msg.err{color:#f87171;text-shadow:0 0 10px rgba(239,68,68,.35)}
+.lg-msg.ok{color:#10b981;text-shadow:0 0 10px rgba(16,185,129,.45)}
+.lg-card.shake{animation:lgShake .45s cubic-bezier(.36,.07,.19,.97)}
+@keyframes lgShake{
+  10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}
+  30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}
+}
+.lg-card.fail{border-color:rgba(239,68,68,.65)}
+.lg-card.okay{border-color:rgba(16,185,129,.7)}
+
+.lg-demo{
+  margin-top:14px;padding:11px 12px;
+  border:1px dashed rgba(34,211,238,.35);background:rgba(34,211,238,.04);
+}
+.lg-demo-t{
+  font-family:Consolas,monospace;font-size:10px;letter-spacing:.2em;font-weight:700;
+  color:rgba(34,211,238,.8);margin-bottom:8px;
+}
+.lg-chips{display:flex;flex-wrap:wrap;gap:8px}
+.lg-chip{
+  cursor:pointer;padding:6px 11px;text-align:left;
+  font-family:Consolas,monospace;font-size:11px;color:#dde4ef;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);
+  transition:border-color .15s,background .15s,transform .15s;
+}
+.lg-chip:hover{border-color:#22d3ee;background:rgba(34,211,238,.1);transform:translateY(-1px)}
+.lg-chip b{color:#f5c107;font-weight:700;margin-right:6px}
+
+.lg-foot{
+  display:flex;justify-content:space-between;gap:10px;margin-top:14px;padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.06);
+  font-family:Consolas,monospace;font-size:10px;letter-spacing:.08em;
+  color:rgba(100,120,155,.65);
+}
+.lg-foot .enc{color:rgba(16,185,129,.7)}
+.lg-note{
+  margin-top:12px;text-align:center;
+  font-family:Consolas,monospace;font-size:10px;letter-spacing:.06em;line-height:1.5;
+  color:rgba(100,120,155,.6);
+}
+
+/* Topbar: info pengguna + keluar */
+.user-chip{
+  display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;
+  padding:0 4px 0 12px;margin-left:10px;border-left:1px solid rgba(255,255,255,.1);
+  font-family:Consolas,monospace;
+}
+.user-chip[hidden]{display:none}
+.user-chip span{font-size:12px;color:#dde4ef;font-weight:600}
+.user-chip b{font-size:9.5px;letter-spacing:.14em;color:#22d3ee;font-weight:500}
+.btn-out{
+  margin-left:10px;padding:7px 12px;border-radius:2px;cursor:pointer;
+  font-family:Consolas,monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:#f87171;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.4);
+  transition:background .15s,box-shadow .15s;
+}
+.btn-out[hidden]{display:none}
+.btn-out:hover{background:rgba(239,68,68,.17);box-shadow:0 0 14px rgba(239,68,68,.28)}
+@media(max-width:860px){.user-chip{display:none}.btn-out{padding:6px 9px;font-size:10px;margin-left:6px}}
+@media(max-width:420px){.lg-card{padding:24px 20px 16px}.lg-title{font-size:22px}.lg-foot .clk{display:none}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
-<body>
+<body class="locked">
 
 <!-- Animated background -->
 <canvas id="bgCanvas"></canvas>
@@ -818,6 +1040,8 @@ body{
         <div class="live-dot"></div>
         <span id="liveText">Menyiapkan…</span>
       </div>
+      <div class="user-chip" id="userChip" hidden><span id="userName"></span><b id="userRole"></b></div>
+      <button class="btn-out" id="logoutBtn" type="button" title="Keluar dari sesi" hidden>⏻ KELUAR</button>
     </header>
 
     <section class="msgs" id="msgs" aria-live="polite">
@@ -882,6 +1106,89 @@ body{
 
 <div class="toast" id="toast" hidden></div>
 
+<!-- ══ LOGIN GATE (cyber) ══ -->
+<div class="lg" id="loginGate" role="dialog" aria-modal="true" aria-labelledby="lgTitle">
+  <div class="lg-grid"></div>
+  <div class="lg-glow"></div>
+  <div class="lg-split">
+    <aside class="lg-brand">
+      <img class="lg-brand-logo" src="/static/img/polisi-bersama.png"
+        alt="Polisi Bersama Masyarakat — Melindungi, Mengayomi dan Melayani">
+      <div class="lg-brand-line"></div>
+      <div class="lg-brand-kicker">// SISTEM INFORMASI SDM</div>
+      <h2>Asisten Informasi <span>SDM Polri</span></h2>
+      <p>Tanyakan aturan dan pengumuman SDM dengan bahasa sehari-hari. Jawaban disusun langsung dari dokumen resmi.</p>
+      <ul class="lg-feats">
+        <li>Setiap jawaban disertai sumber dan nomor halaman</li>
+        <li>Tetap berfungsi walau layanan AI sedang offline</li>
+        <li>Mendukung 6 penyedia AI dengan deteksi otomatis</li>
+      </ul>
+    </aside>
+
+  <div class="lg-wrap">
+    <div class="lg-card" id="lgCard">
+      <span class="lg-bracket tl"></span><span class="lg-bracket br"></span>
+
+      <div class="lg-head">
+        <div class="hero lg-hero">
+          <div class="hero-ring a"></div>
+          <div class="hero-ring b"></div>
+          <div class="hero-ring c"></div>
+          <img src="/static/img/logo.png" alt="Logo SDM Polri" class="hero-logo">
+        </div>
+        <h1 class="lg-title" id="lgTitle">SDM <span>POLRI</span></h1>
+        <div class="lg-sub">SECURE KNOWLEDGE TERMINAL</div>
+      </div>
+
+      <div class="lg-boot" id="lgBoot" aria-hidden="true"></div>
+
+      <form class="lg-form" id="lgForm" novalidate autocomplete="on">
+        <div class="lg-field">
+          <label for="lgUser">ID PENGGUNA <em>// username</em></label>
+          <div class="lg-input">
+            <span class="ic">&gt;_</span>
+            <input id="lgUser" name="username" type="text" autocomplete="username"
+              autocapitalize="none" spellcheck="false" placeholder="masukkan ID pengguna" maxlength="40" required>
+          </div>
+        </div>
+
+        <div class="lg-field">
+          <label for="lgPass">KATA SANDI <em>// password</em></label>
+          <div class="lg-input">
+            <span class="ic">***</span>
+            <input id="lgPass" name="password" type="password" autocomplete="current-password"
+              spellcheck="false" placeholder="masukkan kata sandi" maxlength="64" required>
+            <button type="button" class="lg-eye" id="lgEye" aria-label="Tampilkan kata sandi">TAMPIL</button>
+          </div>
+          <div class="lg-caps" id="lgCaps">⚠ CAPS LOCK AKTIF</div>
+        </div>
+
+        <div class="lg-msg" id="lgMsg" role="alert" aria-live="assertive"></div>
+
+        <button type="submit" class="lg-btn" id="lgBtn">
+          <span id="lgBtnTxt">AUTENTIKASI</span><span aria-hidden="true">➤</span>
+          <i class="bar"></i>
+        </button>
+      </form>
+
+      <div class="lg-demo">
+        <div class="lg-demo-t">// AKUN DEMO — KLIK UNTUK MENGISI</div>
+        <div class="lg-chips">
+          <button type="button" class="lg-chip" data-u="admin" data-p="Polri@2026"><b>ADMIN</b>admin</button>
+          <button type="button" class="lg-chip" data-u="operator" data-p="Operator@123"><b>OPERATOR</b>operator</button>
+        </div>
+      </div>
+
+      <div class="lg-foot">
+        <span class="enc">🔒 ENCRYPTED SESSION</span>
+        <span class="clk" id="lgClock">--:--:-- WIB</span>
+      </div>
+    </div>
+    <p class="lg-note">Prototype untuk keperluan seleksi — bukan situs resmi Polri.</p>
+  </div>
+  </div>
+</div>
+
 <div class="kmodal" id="keyModal" hidden role="dialog" aria-modal="true" aria-labelledby="keyTitle">
   <div class="kmodal-bg" id="keyBg"></div>
   <div class="kmodal-box" style="width:min(580px,100%)">
@@ -910,6 +1217,155 @@ body{
   </div>
 </div>
 
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  LOGIN GATE (gerbang tampilan — bukan keamanan server)
+// ═══════════════════════════════════════════════════════
+(function(){
+  'use strict';
+  var AUTH_KEY='rag-polri-auth', LOCK_KEY='rag-polri-lock', CHAT_KEY='rag-polri-v3';
+  var MAX_TRY=5, LOCK_SEC=30;
+  var ACCOUNTS={
+    'admin':   {pw:'Polri@2026',   name:'Administrator', role:'ADMIN SSDM'},
+    'operator':{pw:'Operator@123', name:'Operator Satker', role:'OPERATOR SATKER'}
+  };
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function $(id){return document.getElementById(id)}
+  var gate=$('loginGate'),card=$('lgCard'),form=$('lgForm'),uIn=$('lgUser'),pIn=$('lgPass'),
+      msg=$('lgMsg'),btn=$('lgBtn'),btnTxt=$('lgBtnTxt'),eye=$('lgEye'),caps=$('lgCaps'),
+      boot=$('lgBoot'),clock=$('lgClock'),chip=$('userChip'),uName=$('userName'),uRole=$('userRole'),
+      out=$('logoutBtn');
+  var tries=0,locked=false,lockTimer=0;
+
+  function getAuth(){try{return JSON.parse(sessionStorage.getItem(AUTH_KEY)||'null')}catch(_){return null}}
+  function showUser(a){
+    uName.textContent=a.name;uRole.textContent=a.role;chip.hidden=false;out.hidden=false;
+  }
+  function unlock(a,instant){
+    showUser(a);
+    document.body.classList.remove('locked');
+    if(instant){gate.hidden=true;return}
+    gate.classList.add('out');
+    setTimeout(function(){gate.hidden=true;var t=$('ta');if(t)t.focus()},650);
+  }
+
+  // sudah login di sesi ini → langsung masuk
+  var cur=getAuth();
+  if(cur&&ACCOUNTS[cur.u]){unlock({name:cur.name,role:cur.role},true);return}
+
+  // ── jam WIB ──
+  function tick(){
+    try{clock.textContent=new Date().toLocaleTimeString('id-ID',{timeZone:'Asia/Jakarta',hour12:false}).replace(/\./g,':')+' WIB'}catch(_){}
+  }
+  tick();setInterval(tick,1000);
+
+  // ── animasi boot (mengetik) ──
+  var lines=['> init secure channel ........ OK','> load rag engine ............ OK','> awaiting credentials'];
+  (function type(){
+    if(reduce){boot.textContent=lines.join('\n');return}
+    var li=0,ci=0,buf='';
+    (function step(){
+      if(li>=lines.length){boot.innerHTML=esc2(buf)+'<span class="cur"></span>';return}
+      var L=lines[li];
+      if(ci<L.length){ci++;boot.innerHTML=esc2(buf+L.slice(0,ci))+'<span class="cur"></span>';setTimeout(step,14)}
+      else{buf+=L+'\n';li++;ci=0;setTimeout(step,90)}
+    })();
+  })();
+  function esc2(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+  // ── tampil/sembunyi sandi ──
+  eye.addEventListener('click',function(){
+    var show=pIn.type==='password';
+    pIn.type=show?'text':'password';
+    eye.textContent=show?'SEMBUNYI':'TAMPIL';
+    eye.setAttribute('aria-label',show?'Sembunyikan kata sandi':'Tampilkan kata sandi');
+    pIn.focus();
+  });
+  // ── caps lock ──
+  function capsCheck(e){caps.classList.toggle('on',!!(e.getModifierState&&e.getModifierState('CapsLock')))}
+  pIn.addEventListener('keydown',capsCheck);pIn.addEventListener('keyup',capsCheck);
+  pIn.addEventListener('blur',function(){caps.classList.remove('on')});
+  // ── isi cepat akun demo ──
+  Array.prototype.forEach.call(document.querySelectorAll('.lg-chip'),function(c){
+    c.addEventListener('click',function(){
+      uIn.value=c.dataset.u;pIn.value=c.dataset.p;setMsg('','');pIn.focus();
+    });
+  });
+
+  function setMsg(t,c){msg.textContent=t;msg.className='lg-msg'+(c?' '+c:'')}
+
+  // ── lockout (bertahan saat refresh) ──
+  function lockLeft(){
+    var u=+sessionStorage.getItem(LOCK_KEY)||0;return Math.max(0,Math.ceil((u-Date.now())/1000));
+  }
+  function startLock(){
+    locked=true;btn.disabled=true;uIn.disabled=pIn.disabled=true;
+    clearInterval(lockTimer);
+    (function upd(){
+      var s=lockLeft();
+      if(s<=0){
+        clearInterval(lockTimer);locked=false;tries=0;sessionStorage.removeItem(LOCK_KEY);
+        btn.disabled=false;uIn.disabled=pIn.disabled=false;btnTxt.textContent='AUTENTIKASI';
+        setMsg('Silakan coba lagi.','');uIn.focus();return;
+      }
+      btnTxt.textContent='TERKUNCI '+s+' DTK';
+      setMsg('✗ TERLALU BANYAK PERCOBAAN — akses dikunci sementara.','err');
+    })();
+    lockTimer=setInterval(function(){
+      var s=lockLeft();
+      if(s<=0){startLock();return}
+      btnTxt.textContent='TERKUNCI '+s+' DTK';
+    },1000);
+  }
+  if(lockLeft()>0)startLock();
+
+  function fail(text){
+    card.classList.remove('okay');card.classList.add('fail');
+    card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');
+    setMsg(text,'err');
+    setTimeout(function(){card.classList.remove('fail')},1400);
+  }
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(locked||btn.disabled)return;
+    var u=uIn.value.trim().toLowerCase(),p=pIn.value;
+    if(!u||!p){fail('✗ ID pengguna dan kata sandi wajib diisi.');(u?pIn:uIn).focus();return}
+
+    btn.disabled=true;btn.classList.add('busy');btnTxt.textContent='MEMVERIFIKASI…';
+    setMsg('> memverifikasi kredensial…','');
+    setTimeout(function(){
+      btn.classList.remove('busy');
+      var acc=Object.prototype.hasOwnProperty.call(ACCOUNTS,u)?ACCOUNTS[u]:null;
+      if(acc&&acc.pw===p){
+        try{sessionStorage.setItem(AUTH_KEY,JSON.stringify({u:u,name:acc.name,role:acc.role,t:Date.now()}))}catch(_){}
+        card.classList.add('okay');btnTxt.textContent='AKSES DITERIMA';
+        setMsg('✓ AKSES DITERIMA — memuat terminal…','ok');
+        setTimeout(function(){unlock({name:acc.name,role:acc.role})},reduce?0:750);
+        return;
+      }
+      tries++;pIn.value='';
+      btnTxt.textContent='AUTENTIKASI';
+      if(tries>=MAX_TRY){
+        sessionStorage.setItem(LOCK_KEY,String(Date.now()+LOCK_SEC*1000));startLock();
+        card.classList.add('fail','shake');return;
+      }
+      btn.disabled=false;
+      fail('✗ AKSES DITOLAK — ID atau kata sandi salah (sisa '+(MAX_TRY-tries)+' percobaan).');
+      pIn.focus();
+    },reduce?0:1100);
+  });
+
+  // ── keluar ──
+  out.addEventListener('click',function(){
+    try{sessionStorage.removeItem(AUTH_KEY);sessionStorage.removeItem(CHAT_KEY)}catch(_){}
+    location.reload();
+  });
+
+  setTimeout(function(){uIn.focus()},250);
+})();
+</script>
 
 <script>
 // ═══════════════════════════════════════════════════════

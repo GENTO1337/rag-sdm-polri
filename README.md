@@ -10,7 +10,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white)](https://docker.com)
-[![LLM](https://img.shields.io/badge/LLM-6_Provider-412991?style=flat-square)](#-teknologi-yang-digunakan)
+[![LLM](https://img.shields.io/badge/LLM-6_Provider-412991?style=flat-square)](#teknologi-yang-digunakan)
 [![Qdrant](https://img.shields.io/badge/Vector_DB-Qdrant-DC244C?style=flat-square)](https://qdrant.tech)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
@@ -42,6 +42,7 @@ Sistem ini mengimplementasikan pipeline **RAG (Retrieval-Augmented Generation)**
 | **Chunk Explorer** | Inspect semua potongan dokumen yang terindeks |
 | **Score Bars** | Visualisasi skor KEYWORD · VECTOR · RERANK per sumber |
 | **Cyber UI** | Tampilan terminal siber bertema SDM Polri (emas/merah/hitam) |
+| **Login Cyber** | Halaman masuk dua kolom (logo *Polisi Bersama Masyarakat* + form), animasi boot, tampil/sembunyi sandi, peringatan Caps Lock, kunci 30 dtk setelah 5x salah, tombol Keluar |
 | **Docker Ready** | Satu perintah `docker compose up` langsung jalan |
 | **Multi-Provider AI** | Tempel API key di UI, jenis penyedia dikenali otomatis (Gemini, OpenAI, Groq, OpenRouter, Anthropic, Mistral) |
 | **Cepat & Tahan Gagal** | Model Gemini ditemukan otomatis, balapan model paralel (hedged request), circuit breaker 30 dtk |
@@ -177,7 +178,7 @@ http://localhost:8080
 
 ---
 
-##  Docker — Detail
+## Docker — Detail
 
 ### Struktur Container
 
@@ -253,7 +254,8 @@ rag-sdm-polri/
 │       ├── index.html   # Single-page Cyber UI
 │       ├── css/         # (embedded di index.html)
 │       └── img/
-│           └── logo.png # Logo SDM Polri
+│           ├── logo.png            # Logo SDM Polri
+│           └── polisi-bersama.png  # Logo Polisi Bersama Masyarakat (login & watermark)
 ├── data/
 │   ├── docs/            # Dokumen PDF knowledge base
 │   ├── index/           # Cache BM25 & embedding (auto-generated)
@@ -272,7 +274,7 @@ rag-sdm-polri/
 
 ---
 
-## 🔧 Teknologi yang Digunakan
+## Teknologi yang Digunakan
 
 | Komponen | Teknologi |
 |---|---|
@@ -289,19 +291,23 @@ rag-sdm-polri/
 | **Frontend** | HTML5, CSS3, Vanilla JavaScript (tanpa build step) |
 | **Containerisasi** | Docker, Docker Compose (named volume, non-root user, healthcheck) |
 
----|---|
-| **Backend** | Python 3.11, FastAPI, Uvicorn |
-| **PDF Parsing** | PyMuPDF (fitz) + OCR sidecar |
-| **Retrieval** | BM25 (custom), Numpy, Reciprocal Rank Fusion |
-| **Re-ranking** | Keyword coverage + phrase match + section match |
-| **LLM** | OpenAI API (gpt-4o-mini) |
-| **Frontend** | Vanilla JS, HTML5 Canvas (particle network) |
-| **Containerisasi** | Docker, Docker Compose |
-| **HTTP Client** | HTTPX (async-capable) |
-
 ---
 
-##  Cara Penggunaan
+## Cara Penggunaan
+
+### Masuk (Login)
+
+Saat aplikasi dibuka muncul halaman login. Klik salah satu chip **AKUN DEMO** untuk mengisi otomatis, lalu tekan **AUTENTIKASI**.
+
+| Peran | ID pengguna | Kata sandi |
+|---|---|---|
+| Admin SSDM | `admin` | `Polri@2026` |
+| Operator Satker | `operator` | `Operator@123` |
+
+Setelah masuk, nama dan peran tampil di bagian atas, dan tombol **KELUAR** mengakhiri sesi. Setelah 5 kali salah, form terkunci 30 detik.
+
+> [!NOTE]
+> Login ini adalah **gerbang tampilan** untuk demo prototype (verifikasi di sisi browser, sesi hilang saat tab ditutup). Bukan pengganti autentikasi server; untuk produksi gunakan login berbasis server (mis. JWT) dan lindungi endpoint API.
 
 ### Bertanya dari Knowledge Base
 
@@ -338,7 +344,7 @@ Klik tombol **"Chunks"** pada dokumen di sidebar untuk melihat semua potongan te
 
 ---
 
-##  Testing
+## Testing
 
 ```bash
 # Test retrieval (7 query — harus semua PASS)
@@ -353,7 +359,7 @@ python scripts/debug_retrieval.py
 
 ---
 
-##  Catatan
+## Catatan
 
 - Retrieval bersifat **hibrida** (BM25 + embedding). Model embedding diunduh sekali dari HuggingFace di latar belakang; selama belum siap, sistem memakai BM25 saja sehingga startup tidak menunggu.
 - Jawaban hanya berdasarkan dokumen di knowledge base. Jika informasi tidak tersedia, sistem akan menyampaikan bahwa data tidak ditemukan.
@@ -362,7 +368,7 @@ python scripts/debug_retrieval.py
 
 ---
 
-##  Dibuat untuk
+## Dibuat untuk
 
 **Seleksi Kemampuan Pemrograman — Tahap 2**
 Topik: *Retrieval-Augmented Generation (RAG)*
