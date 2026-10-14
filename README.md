@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="app/static/img/RAG.jpeg" alt="Logo SDM Polri" width="120"/>
+<img src="app/static/img/RAG.jpeg" alt="Logo SDM Polri" width="500"/>
 
 # RAG SDM POLRI
 
